@@ -19,7 +19,7 @@ window.login = function () {
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       alert("Login realizado.");
-      window.location.href = "agendamento.html";
+      window.location.href = "./agendamento.html";
     })
     .catch((error) => {
       alert("Erro: " + error.message);
