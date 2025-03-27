@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Professores - Agendamento</title>
+    <link rel="manifest" href="./manifest.json">
+</head>
+<body>
+    <h1>Login</h1>
+    <input type="email" id="email" placeholder="E-mail"><br>
+    <input type="password" id="password" placeholder="Senha"><br>
+    <button onclick="login()">Entrar</button>
+
+    <h2>Cadastrar novo professor</h2>
+    <input type="email" id="newEmail" placeholder="Novo e-mail"><br>
+    <input type="password" id="newPassword" placeholder="Nova senha"><br>
+    <button onclick="register()">Cadastrar</button>
+
+    <script type="module" src="./auth.js">
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("Service Worker registrado com sucesso"))
+    .catch(err => console.log("Erro ao registrar Service Worker:", err));
+}
+    </script>
+</body>
+</html>
