@@ -18,7 +18,7 @@ window.login = function () {
   const password = document.getElementById("password").value;
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      alert("Login realizado!");
+      alert("Login realizado.");
       window.location.href = "agendamento.html";
     })
     .catch((error) => {
