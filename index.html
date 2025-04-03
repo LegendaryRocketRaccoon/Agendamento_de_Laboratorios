@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Professores - Agendamento</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+    <div class="container">
+        <img src="senai-logo.png" alt="Logo SENAI" class="logo-senai">
+        
+        <h1>Login</h1>
+        <div class="input-section">
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Digite seu email">
+        </div>
+        <div class="input-section">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" placeholder="Digite sua senha">
+        </div>
+        <button onclick="login()">Entrar</button>
+
+        <div class="forgot-password">
+            <a href="#" onclick="esqueciSenha()">Esqueci minha senha</a>
+        </div>
+
+        <div class="signup-link">
+            <p>Ainda não tem uma conta? <a href="#" onclick="mostrarCadastro()">Cadastrar-se</a></p>
+        </div>
+
+        <div id="cadastro-form" class="cadastro-form" style="display: none;">
+            <h2>Cadastro</h2>
+            <div class="input-section">
+                <label for="new-email">Email:</label>
+                <input type="email" id="new-email" placeholder="Digite seu email">
+            </div>
+            <div class="input-section">
+                <label for="new-password">Senha:</label>
+                <input type="password" id="new-password" placeholder="Digite sua senha">
+            </div>
+            <button onclick="cadastrar()">Cadastrar</button>
+            <p id="cadastro-mensagem"></p>
+        </div>
+
+        <p id="mensagem"></p>
+    </div>
+
+    <script type="module" src="./auth.js"></script>
+    <script>
+        function mostrarCadastro() {
+            document.getElementById("cadastro-form").style.display = "block";
+        }
+    </script>
+</body>
+
+</html>
