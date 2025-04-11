@@ -20,10 +20,54 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function carregarAgendamentos() {
-    const tabela = document.getElementById("tabela-agendamentos");
+    const containerTabelas = document.getElementById("container-tabelas");
+    containerTabelas.innerHTML = "";
+
+    database.ref("agendamentos").once("value", function (snapshot) {
+        const agendamentosPorLaboratorio = {};
+
+        snapshot.forEach(function (childSnapshot) {
+            const key = childSnapshot.key;
+            const agendamento = childSnapshot.val();
+
+            if (!agendamentosPorLaboratorio[agendamento.laboratorio]) {
+                agendamentosPorLaboratorio[agendamento.laboratorio] = [];
+            }
+
+            agendamentosPorLaboratorio[agendamento.laboratorio].push({ key, ...agendamento });
+        });
+
+        Object.keys(agendamentosPorLaboratorio).forEach(laboratorio => {
+            renderizarTabela(laboratorio, agendamentosPorLaboratorio[laboratorio]);
+        });
+    });
+}
+
+function filtrarPorLaboratorio(laboratorioAlvo) {
+    const containerTabelas = document.getElementById("container-tabelas");
+    containerTabelas.innerHTML = "";
+
+    database.ref("agendamentos").orderByChild("laboratorio").equalTo(laboratorioAlvo).once("value", function (snapshot) {
+        const agendamentos = [];
+        snapshot.forEach(function (childSnapshot) {
+            const key = childSnapshot.key;
+            const agendamento = childSnapshot.val();
+            agendamentos.push({ key, ...agendamento });
+        });
+
+        renderizarTabela(laboratorioAlvo, agendamentos);
+    });
+}
+
+function renderizarTabela(laboratorio, agendamentos) {
+    const container = document.getElementById("container-tabelas");
+    const titulo = document.createElement("h3");
+    titulo.textContent = `Agendamentos - ${laboratorio}`;
+    container.appendChild(titulo);
+
+    const tabela = document.createElement("table");
     tabela.innerHTML = `
         <tr>
-            <th>Laboratório</th>
             <th>Data</th>
             <th>Turno</th>
             <th>Professor</th>
@@ -32,27 +76,22 @@ function carregarAgendamentos() {
         </tr>
     `;
 
-    database.ref("agendamentos").once("value", function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-            const key = childSnapshot.key;
-            const agendamento = childSnapshot.val();
-
-            const linha = document.createElement("tr");
-            linha.innerHTML = `
-                <td>${agendamento.laboratorio}</td>
-                <td>${agendamento.data}</td>
-                <td>${agendamento.turno}</td>
-                <td>${agendamento.professor}</td>
-                <td>${agendamento.email}</td>
-                <td>
-                    <button onclick="editarAgendamento('${key}', '${agendamento.laboratorio}', '${agendamento.data}', '${agendamento.turno}', '${agendamento.professor}')">Editar</button>
-                    <button onclick="excluirAgendamento('${key}')">Excluir</button>
-                </td>
-            `;
-
-            tabela.appendChild(linha);
-        });
+    agendamentos.forEach(agendamento => {
+        const linha = document.createElement("tr");
+        linha.innerHTML = `
+            <td>${agendamento.data}</td>
+            <td>${agendamento.turno}</td>
+            <td>${agendamento.professor}</td>
+            <td>${agendamento.email}</td>
+            <td>
+                <button onclick="editarAgendamento('${agendamento.key}', '${agendamento.laboratorio}', '${agendamento.data}', '${agendamento.turno}', '${agendamento.professor}')">Editar</button>
+                <button onclick="excluirAgendamento('${agendamento.key}')">Excluir</button>
+            </td>
+        `;
+        tabela.appendChild(linha);
     });
+
+    container.appendChild(tabela);
 }
 
 function adicionarAgendamento() {
@@ -60,10 +99,9 @@ function adicionarAgendamento() {
     const data = document.getElementById("data").value;
     const turno = document.getElementById("turno").value;
     const professor = document.getElementById("professor").value;
-    const email = localStorage.getItem("usuarioEmail");
+    const email = document.getElementById("email").value;
 
     if (laboratorio && data && turno && professor) {
-
         database.ref("agendamentos").orderByChild("data").equalTo(data).once("value", function (snapshot) {
             let existeConflito = false;
             snapshot.forEach(function (childSnapshot) {
@@ -76,14 +114,7 @@ function adicionarAgendamento() {
             if (existeConflito) {
                 alert("Já existe um agendamento para esse laboratório, data e turno.");
             } else {
-                const novoAgendamento = {
-                    laboratorio,
-                    data,
-                    turno,
-                    professor,
-                    email
-                };
-
+                const novoAgendamento = { laboratorio, data, turno, professor, email };
                 database.ref("agendamentos").push(novoAgendamento)
                     .then(() => {
                         alert("Agendamento salvo com sucesso!");
@@ -134,7 +165,6 @@ function editarAgendamento(key, laboratorio, data, turno, professor) {
 }
 
 window.onload = carregarAgendamentos;
-
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js')
