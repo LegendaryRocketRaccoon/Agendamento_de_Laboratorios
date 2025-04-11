@@ -11,7 +11,7 @@ body {
     margin-bottom: 20px;
 }
 
-.container {
+.form-container {
     width: 50%;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -57,10 +57,11 @@ button {
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
     font-size: 16px;
+    margin-bottom: 10px;
 }
 
 button:hover {
-    background-color: #165bb4;
+    background-color: #1a66cc;
     transform: scale(1.05);
 }
 
@@ -130,5 +131,9 @@ tr:hover {
 
     table {
         font-size: 14px;
+    }
+
+    #container-tabelas {
+        overflow-x: auto;
     }
 }
