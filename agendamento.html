@@ -85,22 +85,20 @@
         <label for="professor">Professor:</label>
         <input type="text" id="professor" placeholder="Nome do professor" required>
 
+        <input type="hidden" id="email" />
         <button type="button" onclick="adicionarAgendamento()">Adicionar Agendamento</button>
-    </form>
+    <hr>
 
-    <table id="tabela-agendamentos">
-        <tr>
-            <th>Laboratório</th>
-            <th>Data</th>
-            <th>Turno</th>
-            <th>Professor</th>
-            <th>Ações</th>
-        </tr>
-    </table>
+    <div>
+        <button onclick="filtrarPorLaboratorio('Laboratório 1')">Ver Laboratório 1</button>
+        <button onclick="filtrarPorLaboratorio('Laboratório 2')">Ver Laboratório 2</button>
+        <button onclick="filtrarPorLaboratorio('Laboratório 3')">Ver Laboratório 3</button>
+        <button onclick="filtrarPorLaboratorio('Laboratório 4')">Ver Laboratório 4</button>
+        <button onclick="carregarAgendamentos()">Ver Todos</button>
+    </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="./script.js"></script>
+    <div id="container-tabelas"></div>
+
+    <script src="script.js"></script>
 </body>
-
 </html>
